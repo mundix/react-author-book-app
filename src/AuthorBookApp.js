@@ -1,31 +1,43 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 
 export const AuthorBookApp = () => {
 
-    const [state, setState] = useState({ searchQuery: '' });
-    const { searchQuery } = state;
+    const [authorDocs, setAuthorDocs] = useState(null);
 
     const handleInputChange = ({ target }) => {
-        setState({ searchQuery: target.value });
+        axios.get(`https://openlibrary.org/search/authors.json?q=${target.value}`)
+            .then(resp => {
+                setAuthorDocs(resp.data.docs);
+            })
     }
-
 
     return (
         <>
-            <h1>Author Book App</h1>
-            <div>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Control 
-                    type="text" 
-                    placeholder="Search by Authors, Books..."
-                    onChange={handleInputChange}
-                     />
-                    <Form.Text className="text-muted">
-                        We'll never share your email with anyone else.
-                    </Form.Text>
-                </Form.Group>
-                <h2>{searchQuery}</h2>
+            <div className='row col-10 d-flex'>
+                <div className="form-group ">
+                    <input
+                        className='form-control p-4 justify-center'
+                        type="text"
+                        className="form-control"
+                        onChange={handleInputChange}
+                        placeholder='Type Author or Book name ... '
+                    />
+                </div>
+                {
+                    !!authorDocs && (
+                        <ul>
+                            {
+                                authorDocs.map(doc => {
+                                    return (
+                                        <li key={doc.key}>{doc.name}</li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    )
+                }
 
             </div>
         </>
