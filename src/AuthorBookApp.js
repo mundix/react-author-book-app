@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { AuthorContext } from './contexts/AuthorContext';
 import { AuthorDocs } from './components/AuthorDocs';
 import { DocDetails } from './components/DocDetails';
-import { EntriesContext } from './contexts/EntriesContext';
+import { EntryContext } from './contexts/EntryContext';
 
 export const AuthorBookApp = () => {
 
@@ -34,7 +34,7 @@ export const AuthorBookApp = () => {
 
     return (
         <AuthorContext.Provider value={{authorDocs, setAuthorDocs}}>
-            <EntriesContext.Provider value={{authorDocs, setAuthorDocs, isAuthorDocs, setIsAuthorDocs}}>
+            <EntryContext.Provider value={{authorDocs, setAuthorDocs, isAuthorDocs, setIsAuthorDocs}}>
             <div className='row col-10 d-flex p-5'>
                 <div className="form-group ">
                     <input
@@ -57,7 +57,7 @@ export const AuthorBookApp = () => {
                 }
 
             </div>
-            </EntriesContext.Provider>
+            </EntryContext.Provider>
         </AuthorContext.Provider>
     )
 }
