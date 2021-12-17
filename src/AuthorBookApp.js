@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { AuthorContext } from './contexts/AuthorContext';
 import { AuthorDocs } from './components/AuthorDocs';
 import { DocDetails } from './components/DocDetails';
+import { EntriesContext } from './contexts/EntriesContext';
 
 export const AuthorBookApp = () => {
 
@@ -32,7 +33,8 @@ export const AuthorBookApp = () => {
     }
 
     return (
-        <>
+        <AuthorContext.Provider value={{authorDocs, setAuthorDocs}}>
+            <EntriesContext.Provider value={{authorDocs, setAuthorDocs, isAuthorDocs, setIsAuthorDocs}}>
             <div className='row col-10 d-flex p-5'>
                 <div className="form-group ">
                     <input
@@ -55,6 +57,7 @@ export const AuthorBookApp = () => {
                 }
 
             </div>
-        </>
+            </EntriesContext.Provider>
+        </AuthorContext.Provider>
     )
 }
