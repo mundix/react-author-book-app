@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { useState } from "react";
 
-export const DocDetails = ({authorDocEntries = []}) => {
+export const EntryComponent = ({authorDocEntries: entries = []}) => {
 
-    const [showEntryDetail, setShowEntryDetail] = useState(false);
+    const [showDetail, setShowDetail] = useState(false);
 
     const getEntryKey = (entryKey) => {
         const [, ,key ] = entryKey.split("/");
@@ -21,7 +21,7 @@ export const DocDetails = ({authorDocEntries = []}) => {
     return (
         <ul>
             {
-                !!authorDocEntries && !showEntryDetail && authorDocEntries.map(entry => {
+                !!entries && !showDetail && entries.map(entry => {
                     return (
                         <li key={'docDetail_'+getEntryKey(entry.key)} onClick={()=> handleEntryDetail(entry.key)}>
                             {entry.title}
