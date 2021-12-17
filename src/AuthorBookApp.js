@@ -1,21 +1,39 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
+import { AuthorDocs } from './components/AuthorDocs';
+import { DocDetails } from './components/DocDetails';
 
 export const AuthorBookApp = () => {
 
     const [authorDocs, setAuthorDocs] = useState(null);
+    const [isAuthorDocs, setIsAuthorDocs] = useState(false);
+    const [authorDocEntries, setAuthorDocEntries] = useState(null);
 
-    const handleInputChange = ({ target }) => {
-        axios.get(`https://openlibrary.org/search/authors.json?q=${target.value}`)
-            .then(resp => {
-                setAuthorDocs(resp.data.docs);
-            })
+    const handleInputChange = async ({ target }) => {
+        setIsAuthorDocs(false);
+        if (!isAuthorDocs) {
+
+            await axios.get(`https://openlibrary.org/search/authors.json?q=${target.value}`)
+                .then(resp => {
+                    setAuthorDocs(resp.data.docs);
+                })
+        }
+    }
+
+    const handleAuthorData = async (authorKey = null) => {
+        if(!!authorKey) {
+            setIsAuthorDocs(true);
+            await axios.get(`https://openlibrary.org/authors/${authorKey}/works.json`)
+                .then(resp => {
+                    setAuthorDocEntries(resp.data.entries);
+                })
+        }
     }
 
     return (
         <>
-            <div className='row col-10 d-flex'>
+            <div className='row col-10 d-flex p-5'>
                 <div className="form-group ">
                     <input
                         className='form-control p-4 justify-center'
@@ -26,16 +44,13 @@ export const AuthorBookApp = () => {
                     />
                 </div>
                 {
-                    !!authorDocs && (
-                        <ul>
-                            {
-                                authorDocs.map(doc => {
-                                    return (
-                                        <li key={doc.key}>{doc.name}</li>
-                                    )
-                                })
-                            }
-                        </ul>
+                    !!authorDocs && !isAuthorDocs && (
+                        <AuthorDocs docs={authorDocs} handleAuthorData={handleAuthorData} />
+                    )
+                }
+                {
+                    isAuthorDocs && (
+                        <DocDetails authorDocEntries={authorDocEntries}/>
                     )
                 }
 
