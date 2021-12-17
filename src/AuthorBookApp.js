@@ -22,19 +22,10 @@ export const AuthorBookApp = () => {
         }
     }
 
-    const handleAuthorData = async (authorKey = null) => {
-        if(!!authorKey) {
-            setIsAuthorDocs(true);
-            await axios.get(`https://openlibrary.org/authors/${authorKey}/works.json`)
-                .then(resp => {
-                    setAuthorDocEntries(resp.data.entries);
-                })
-        }
-    }
+    
 
     return (
-        <AuthorContext.Provider value={{authorDocs, setAuthorDocs}}>
-            <EntryContext.Provider value={{authorDocs, setAuthorDocs, isAuthorDocs, setIsAuthorDocs}}>
+        <AuthorContext.Provider value={setIsAuthorDocs, setAuthorDocEntries}>
             <div className='row col-10 d-flex p-5'>
                 <div className="form-group ">
                     <input
@@ -47,7 +38,7 @@ export const AuthorBookApp = () => {
                 </div>
                 {
                     !!authorDocs && !isAuthorDocs && (
-                        <AuthorDocs docs={authorDocs} handleAuthorData={handleAuthorData} />
+                        <AuthorDocs docs={authorDocs} />
                     )
                 }
                 {
@@ -57,7 +48,6 @@ export const AuthorBookApp = () => {
                 }
 
             </div>
-            </EntryContext.Provider>
         </AuthorContext.Provider>
     )
 }
