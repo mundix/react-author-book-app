@@ -1,13 +1,17 @@
 import axios from "axios";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const AuthorComponent = ({ works = [] }) => {
 
     const [workEntries, setWorkEntries] = useState(null);
 
+    useEffect(() => {
+        setWorkEntries(false);
+    }, []);
+
     const handleAuthorEntry = async (authorKey = null) => {
         if (!!authorKey) {
-            // setIsAuthorDocs(true);
+            setWorkEntries(true);
             await axios.get(`https://openlibrary.org/authors/${authorKey}/works.json`)
                 .then(resp => {
                     setWorkEntries(resp.data.entries);
@@ -16,14 +20,20 @@ export const AuthorComponent = ({ works = [] }) => {
     }
 
     return (
-        <ul>
+        <>
             {
-                works.map(doc => {
-                    return (
-                        <li key={doc.key} onClick={() => { handleAuthorEntry(doc.key) }}>{doc.name}</li>
-                    )
-                })
+                !workEntries ? (()=>{
+                    <ul>
+                         {works.map(doc => {
+                             (
+                                <li key={doc.key} onClick={() => { handleAuthorEntry(doc.key) }}>{doc.name}</li>
+                             )
+                         })}
+                    </ul>
+                }) 
+                : null
+                
             }
-        </ul>
+        </>
     )
 }
