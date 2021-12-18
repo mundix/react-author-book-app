@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-export const WorkItem = ({work, setWorkEntries}) => {
+export const WorkItem = ({ work, setWorkEntries }) => {
 
     const handleWorkEntries = async (entryKey = null) => {
-        if(!!entryKey) {
-            setWorkEntries(true);
+        if (!!entryKey) {
             await axios.get(`https://openlibrary.org/authors/${entryKey}/works.json`)
                 .then(resp => {
                     setWorkEntries(resp.data.entries);
